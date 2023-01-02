@@ -125,45 +125,6 @@ Resources:
             Effect: Allow
             Resource: "*"
           Version: '2012-10-17'
-  CodeBuildSetup:
-    Type: AWS::CodeBuild::Project
-    DependsOn: CodeBuildRole
-    Properties:
-      Description: Setup Test Files. For example uploading to S3
-      ServiceRole: !GetAtt CodeBuildRole.Arn
-      Artifacts:
-        Type: NO_ARTIFACTS
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
-        EnvironmentVariables:
-          - Name: PIPELINE_BUCKET
-            Type: PLAINTEXT
-            Value:
-              Fn::Sub: ${PipelineBucket}
-      Source:
-        Type: GITHUB
-        Location: !Sub https://github.com/${GitHubUser}/${GitHubRepo}.git
-        BuildSpec: buildspec-setup.yml
-      TimeoutInMinutes: 10
-  CodeBuildCleanup:
-    Type: AWS::CodeBuild::Project
-    DependsOn: CodeBuildRole
-    Properties:
-      Description: Setup Test Files. For example uploading to S3
-      ServiceRole: !GetAtt CodeBuildRole.Arn
-      Artifacts:
-        Type: NO_ARTIFACTS
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
-      Source:
-        Type: GITHUB
-        Location: !Sub https://github.com/${GitHubUser}/${GitHubRepo}.git
-        BuildSpec: buildspec-cleanup.yml
-      TimeoutInMinutes: 10
   CodeBuildTaskCatTest:
     Type: AWS::CodeBuild::Project
     DependsOn: CodeBuildRole
