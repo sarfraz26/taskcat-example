@@ -17,7 +17,7 @@ Parameters:
     NoEcho: true
     Type: String
     Default: '{{resolve:secretsmanager:github/access-token:SecretString}}'
-    Description: GitHub Token. Must be defined in AWS Secrets Manager and here https://github.com/settings/tokens
+    Description: GitHub Token.
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -236,20 +236,6 @@ Resources:
         Actions:
         - InputArtifacts:
           - Name: SourceArtifacts
-          Name: Setup
-          ActionTypeId:
-            Category: Test
-            Owner: AWS
-            Version: '1'
-            Provider: CodeBuild
-          OutputArtifacts: 
-          - Name: SetupArtifacts
-          Configuration:
-            ProjectName:
-              Ref: CodeBuildSetup
-          RunOrder: 1
-        - InputArtifacts:
-          - Name: SetupArtifacts
           Name: RunTaskCat
           ActionTypeId:
             Category: Test
@@ -261,7 +247,7 @@ Resources:
           Configuration:
             ProjectName:
               Ref: CodeBuildTaskCatTest
-          RunOrder: 10
+          RunOrder: 1
         - InputArtifacts:
           - Name: TaskCatArtifacts
           Name: TaskCatDashboard
@@ -270,26 +256,11 @@ Resources:
             Owner: AWS
             Version: '1'
             Provider: CodeBuild
-          OutputArtifacts: [] 
-          Configuration:
-            ProjectName:
-              Ref: CodeBuildDashboard
-          RunOrder: 20
-      - Name: Cleanup
-        Actions:
-        - InputArtifacts:
-          - Name: SourceArtifacts
-          Name: RemoveS3Buckets
-          ActionTypeId:
-            Category: Test
-            Owner: AWS
-            Version: '1'
-            Provider: CodeBuild
           OutputArtifacts: []
           Configuration:
             ProjectName:
-              Ref: CodeBuildCleanup
-          RunOrder: 1
+              Ref: CodeBuildDashboard
+          RunOrder: 2
       ArtifactStore:
         Type: S3
         Location: !Ref PipelineBucket
