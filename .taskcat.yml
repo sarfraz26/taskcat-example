@@ -6,5 +6,3 @@ project:
 tests:
   sqs-test:
     template: ./sqs.yml
-  lk-test:
-    template: ./lambdakinesis.json
