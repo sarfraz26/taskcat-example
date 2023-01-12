@@ -6,3 +6,5 @@ project:
 tests:
   sqs-test:
     template: ./template/sqs.yml
+  lambda-test:
+    template: ./template/testlambda.yml
